@@ -14,7 +14,7 @@ trigger:
 pool:
   vmImage: 'ubuntu-latest'
 variables:
-- group: Azure-Variable-Group
+- group: Azure-Variable-Groupp
 - name: MAVEN_CACHE_FOLDER
   value: $(Pipeline.Workspace)/.m2/repository
 - name: MAVEN_OPTS
