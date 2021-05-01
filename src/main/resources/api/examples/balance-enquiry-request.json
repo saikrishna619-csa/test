@@ -1,0 +1,16 @@
+{
+    "getAccountBalanceReq": {
+        "Header": {
+            "receiver":"sbi",
+            "AccountName": "sai",
+            "ReferenceNumber": "23456"
+        },
+        "Body": {
+            "AcctNums": [
+                {
+                    "AccNum": "0440032020604001"
+                }
+            ]
+        }
+    }
+}

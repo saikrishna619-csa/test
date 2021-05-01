@@ -1,0 +1,10 @@
+http:
+  host: "localhost"
+  path: "/api/v1/sbi/core/banking/*"
+  port: "8082"
+
+banknative:
+  host: "sbi-bank-core-banking-api.us-e2.cloudhub.io"
+  path : "api/v1/sbi/core/banking"
+  accountbalancepath: "/account/balance"
+  

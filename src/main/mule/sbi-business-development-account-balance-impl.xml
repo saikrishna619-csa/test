@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:tls="http://www.mulesoft.org/schema/mule/tls" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns:crypto="http://www.mulesoft.org/schema/mule/crypto"
+	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/crypto http://www.mulesoft.org/schema/mule/crypto/current/mule-crypto.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/current/mule-tls.xsd">
+	<http:request-config name="HTTP_Request_configuration" doc:name="HTTP Request configuration" doc:id="24799299-1ced-40a1-9d74-147454c195a1" basePath="${secure::banknative.path}" >
+		<http:request-connection host="${secure::banknative.host}"/>
+	</http:request-config>
+	<sub-flow name="sbi-business-development-account-balance-implSub_Flow" doc:id="9c7f09ee-c7f9-4da3-916c-aa19a1d23c1f" >
+		<crypto:jce-encrypt-pbe doc:name="Jce encrypt pbe" doc:id="450f6366-0a41-4b14-b0c6-0b0c60329f53" algorithm="PBEWithHmacSHA512AndAES_128" password="encryptgpay#$@%$"/>
+		<ee:transform doc:name="Transform Message" doc:id="3066e22c-42af-4e70-aa20-54bab7394a7e" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+import * from dw::core::Binaries
+output text/plain
+---
+toBase64 (payload as Binary)]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<ee:transform doc:name="Transform Message" doc:id="318dd7ff-8d8f-46fb-960a-ada70e6ab701" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	
+	"signature": payload
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<http:request method="POST" doc:name="Request" doc:id="fab63c2e-05fb-4dfd-9105-a42eecb9701f" config-ref="HTTP_Request_configuration" path="${secure::banknative.accountbalancepath}" responseTimeout="60000">
+			<http:headers ><![CDATA[#[output application/java
+---
+{
+	"device":"web",
+"referenceid":"12344555",
+"client_id":"gpay77846482!kol",
+"client_secret":"!23459klll()8(**&((^%&*!!!*",
+"device_type":"jjkkkssksk",
+"client_operation":"kkkk"
+}]]]></http:headers>
+		</http:request>
+		<logger level="INFO" doc:name="Logger" doc:id="02779124-042e-4d1e-a89e-974abc182cf0" message="after request #[payload]"/>
+		<ee:transform doc:name="Transform Message" doc:id="34a057e8-eeb9-43e2-9814-568f66ac7c4b" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output text/plain
+---
+payload.signature]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<ee:transform doc:name="Transform Message" doc:id="d8dcc439-45d0-4c38-b96b-e6fd26194acf" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+import * from dw::core::Binaries
+output application/octet-stream
+---
+fromBase64 (payload as String) as Binary]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<crypto:jce-decrypt-pbe doc:name="Jce decrypt pbe" doc:id="f2cededd-2285-49c6-b281-482404aa7fdc" algorithm="PBEWithMD5AndTripleDES" password="sbigpayclient" outputMimeType="application/json"/>
+		<ee:transform doc:name="Transform Message" doc:id="4f063a7a-76a6-43c4-868c-165fae267858" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</sub-flow>
+</mule>
