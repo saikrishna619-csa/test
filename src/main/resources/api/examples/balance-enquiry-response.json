@@ -2,7 +2,7 @@
   "getAccountBalanceRes": {
     "Header": {
       "AccountBankName": "ANDHRABANK",
-      "ReferenceNumber": "23456",
+      "ReferenceNumber": "23446",
       "Status": "Success",
       "Error_Cde": "200",
       "Error_Desc": "Success"
@@ -13,7 +13,7 @@
           "SequenceNum": "1",
           "AccountStatus": "ACTIVE",
           "CustomerFullName": "sai",
-          "AccountType": "CURRENT ACCOUNT",
+          "AccountType": "CURRENT ACCOUNTS",
           "amountValue": "63.64149999999999",
           "currencyCode": "INR",
           "Status": "Success",

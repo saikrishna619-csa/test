@@ -2,7 +2,7 @@
   "fundTransferDetl": {
     "debitAccountId": "string",
     "payeeId": "string",
-    "amount": "0",
+    "amount": "100",
     "sourceCurrency": "string",
     "destinationCurrency": "string",
     "transferCurrency": "string",
